@@ -1,0 +1,451 @@
+---
+title: "Stat 4121: Applied Spatial Statistics"
+author: "Bedilu A. Ejigu"
+date: "2025-06-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#To set and see your working directory
+   setwd("path")
+   getwd()
+# To clean  the whole and specific file from the environment 
+   ls()          # To see the list of objects
+   rm(list=ls()) # To remove all list
+   rm(ETH,ids)   # To remove a and b
+   
+# Checking the path for your R library
+   .libPaths()
+#Removing a package from your PC 
+remove.packages(pkgs="terra",lib="C:/Program
+   Files/R/R-4.2.0/library")
+# Save all your objects in SEDA.RData
+ save.image(file = "SEDA.RData") # To save all
+ load("SEDA.RData")              # Load the workspace
+ save(a, b, file = "xy.RData")   # To save a and b
+ saveRDS(a, file = "a.rds")      # To save only a
+ readRDS("a.rds")
+# Show the last 3 commands
+history(3) 
+
+d <- read.csv("MNH_rural.csv")
+# Drop observations with NA location
+d <- subset(d, !is.na(latitude))
+# To count number of missing observations
+sum(is.na(ETHzone_mcp$mcp))
+```
+
+# Spatial Data Exploration
+
+Spatial data exploration depends on the type of spatial data under investigation.
+
+## Areal/lattice type of spatial data
+
+Areal or lattice type of data analysis begin by considering the spatial dependence which is handled through a weighting/neighborhood matrix. The **spdep** and **genstat** packages in **R** contains a number of functions to deal with spatial dependence structures for areal or lattice type of data. Some of its functions can be used to construct spatial neighborhood matrices and perform spatial autocorrelation analyses. For example, the functions *poly2nb()* and *dnearneigh()* can be used to create neighbor lists based on contiguity and distance criteria, respectively. Spatial neighborhood matrices can be built from the neighbor lists using the *nb2listw()* function.
+
+### Data prepartion
+
+First load the dataset with polygon shapefile and collected observations in each polygon. To demonstrate basic concepts, PMA2019 survey data was considered. In this survey data from 13 Zones (from SNNP and Somali regions) were not collected. As a result region average values were imputed for each of the 13 zones(SNNP-Amaro, SNNP-Basketo, SNNP-Burji, Somali-Daawa, SNNP-Derashe, Somali-Doolo, SNNP-Halaba,SNNP-Konta,Somali-Korahe,SNNP-Mirab Omo,Somali-Nogob,Somali-Shabelle,SNNP-Yem).
+
+```{r}
+library(sf)
+library(spdep)
+# Load Ethiopia  Zone shape files
+ETH.Zone=st_read("Data/ShapeFiles/ETH2021/eth_admbnda_adm2_csa_bofedb_2021.shp") #
+plot(ETH.Zone$geometry)
+```
+
+```{r}
+# Load the survey summary data aggregated by Zone
+mcp_data=read.csv("Data/mCP2019.csv")
+# Add Average distance to the SDP  into the  Zone shapefile data
+ETH.Zone$mcp=c(mcp_data$mcp)
+ETH.Zone$mean_dist=c(mcp_data$mean)
+ETHzone_mcp=ETH.Zone[,c(1,2,3,8,15,16,17)]
+View(ETHzone_mcp)
+```
+
+### Neighborhood construction based on geographical proximity or contiguity
+
+The *poly2nb()* function from the **spdep** package can be used to construct a list of neighbors based on areas with contiguous boundaries, that is, Zones sharing one or more boundary point. This function accepts a list of polygons and returns a list of class *nb* with the neighbors of each area.
+
+```{r}
+library(spdep)
+Neighbor <- spdep::poly2nb(ETHzone_mcp, queen = TRUE)
+head(Neighbor)
+# To get the number of neighbors of each area/lattice polygon
+lengths(Neighbor)
+card(Neighbor)
+table(1:nrow(ETHzone_mcp),card(Neighbor))
+```
+
+To visualize which polygon is a neighbor of others can be plotted as follows:
+
+```{r}
+library(ggplot2)
+# Neighbor connectedness
+plot(st_geometry(ETHzone_mcp), border = "lightgray")
+plot.nb(Neighbor, st_geometry(ETHzone_mcp), add = TRUE)
+# Highlighting the neighborhoodness
+id <- 29 # Zone number 29 has 5 neighbors 
+ETHzone_mcp$neighbors <- "other"
+ETHzone_mcp$neighbors[id] <- "area"
+ETHzone_mcp$neighbors[Neighbor[[id]]] <- "neighbors"
+ggplot(ETHzone_mcp) + geom_sf(aes(fill = neighbors)) + theme_bw() +
+scale_fill_manual(values = c("gray30", "gray", "white"))
+# To view  the Zone with largest number of neighbors
+id <- 26 # Zone 26 has 11 neighbors,
+ETHzone_mcp$neighbors <- "other"
+ETHzone_mcp$neighbors[id] <- "area"
+ETHzone_mcp$neighbors[Neighbor[[id]]] <- "neighbors"
+ggplot(ETHzone_mcp) + geom_sf(aes(fill = neighbors)) + theme_bw() +
+scale_fill_manual(values = c("gray30", "gray", "white"))
+
+```
+
+There are also other ways of creating neighborhoodness such as K nearest neighbors, and separation distance.
+
+### Spatial Weights
+
+Once the neighborhood list created, the spatial weights matrix corresponding to a neighbors list can be created using the *nb2listw* function.
+
+```{r}
+# Create neighborhood list
+nb <- poly2nb(ETHzone_mcp, queen = TRUE)
+# The style W is row standardized (1/number of neighbors)
+nbw <- spdep::nb2listw(nb, style = "W")
+nbw$weights[1:5]
+# Changing the style to B  will use the basic binary coding
+nbw2 <- spdep::nb2listw(nb, style = "B")
+nbw2$weights[1:5]
+```
+
+**Spatial weights matrix based on inverse distance values**
+
+The *nbdists* function used to compute the distance along the spatial links from the list of neighbors.
+
+```{r}
+coo <- st_centroid(ETHzone_mcp)
+nb <- poly2nb(ETHzone_mcp, queen = TRUE)
+dists <- nbdists(nb, coo)
+ids <- lapply(dists, function(x){1/x})
+nbw <- nb2listw(nb, glist = ids, style = "W",zero.policy=TRUE)
+nbw$weights[1:3]
+```
+
+### Sptial autocorrelation
+
+Before analyzing spatial data, you may ask "Is there spatial pattern? If so, how strong is it?". Spatial pattern suggests that measurements for areal units which are near to each other will tend to take more similar values than those for units far from each other.
+
+```{r}
+library(sf)
+library(mapview)
+# Interactively viewing the mCPR coverage by Zone
+mapview(ETHzone_mcp, zcol ="mcp")
+#Interactively viewing the average distance from the facility by Zone
+mapview(ETHzone_mcp, zcol ="mean_dist")
+```
+
+#### Moran's I
+
+**Global Moran's I**
+
+The Global Moran’s *I* provides an index to assess the spatial autocorrelation for the whole study region.
+
+```{r}
+# Neighbors
+library(spdep)
+nb <- poly2nb(ETHzone_mcp, queen = TRUE) # queen shares point or border
+nbw <- nb2listw(nb, style = "W")
+# Global Moran's I
+gmoran <-moran.test(ETHzone_mcp$mcp, nbw, zero.policy=attr(nbw,"zero.policy") , na.action=na.omit, alternative ="greater")
+gmoran
+# Moran's I
+gmoran[["estimate"]][["Moran I statistic"]] 
+# z-score
+gmoran[["statistic"]] 
+#p-value
+gmoran[["p.value"]] 
+```
+
+Moran’s I scatter plot
+
+```{r}
+ moran.plot(ETHzone_mcp$mcp, nbw, zero.policy=T,na.action=na.omit)
+```
+
+**Local Moran's I**
+
+In addition to the Global Moran *I*, there is often interest in getting a local measure of similarity between each area’s value and those of nearby areas. Local Indicators of Spatial Association (LISA) are designed to provide an indication of the extent of significant spatial clustering of similar values around each observation. A desirable property is that the sum of the LISA’s values across all regions is equal to a multiple of the global indicator of spatial association.
+
+```{r}
+# Local Moran's I
+lmoran <- localmoran(ETHzone_mcp$mcp, nbw, zero.policy=F,na.action=na.omit,alternative = "greater")
+head(lmoran)
+sum(lmoran[[1]])
+```
+
+```{r}
+library(tmap)
+tmap_mode("plot")
+ETHzone_mcp$lmI <- lmoran[, "Ii"] # local Moran's I
+ETHzone_mcp$lmZ <- lmoran[, "Z.Ii"] # z-scores
+# p-values corresponding to alternative greater
+ETHzone_mcp$lmp <- lmoran[, "Pr(z > E(Ii))"]
+
+p1 <- tm_shape(ETHzone_mcp) + tm_polygons(col = "mcp", title = "Zonal mCPR Coverage", style = "quantile") + tm_layout(legend.outside = TRUE)
+
+p2 <- tm_shape(ETHzone_mcp) + tm_polygons(col = "lmI", title = "Local Moran's I",
+style = "quantile") + tm_layout(legend.outside = TRUE)
+
+p3 <- tm_shape(ETHzone_mcp) + tm_polygons(col = "lmZ", title = "Z-score",
+breaks = c(-Inf, 1.65, Inf)) + tm_layout(legend.outside = TRUE)
+
+p4 <- tm_shape(ETHzone_mcp) + tm_polygons(col = "lmp", title = "p-value",
+breaks = c(-Inf, 0.05, Inf)) + tm_layout(legend.outside = TRUE)
+
+tmap_arrange(p1, p2, p3, p4)
+```
+
+**Example 2: HIV in South Africa**
+
+```{r}
+library(sf)
+library(spdep)
+district=st_read("Data/ShapeFiles/SAZ/zaf_admbnda_adm2_sadb_ocha_20201109.shp")
+#Load district level summarized HIV data
+HIV_prev <- read.csv("Data/SA_Admn2_HIV.csv")
+# Add the data to the Shapefile
+district$HIV=HIV_prev$HIV_prev
+# Create spatial weight matrix 
+nb2 <- poly2nb(district, queen = TRUE) # queen shares point or border
+nbw2 <- nb2listw(nb2, style = "W")
+# Global Moran's I
+gmoran2 <- moran.test(district$HIV, nbw2, zero.policy=attr(nbw2,"zero.policy") , na.action=na.omit, alternative ="greater")
+gmoran2
+# z-score
+gmoran2[["statistic"]] 
+#p-value
+gmoran2[["p.value"]] 
+# Moran’s I scatter plot
+moran.plot(district$HIV, nbw2, zero.policy=T,na.action=na.omit)
+```
+
+```{r}
+# Moran’s I scatter plot
+par(mfrow=c(1,2))
+moran.plot(district$HIV, nbw2, zero.policy=T,na.action=na.omit)
+moran.plot(ETHzone_mcp$mcp, nbw, zero.policy=T,na.action=na.omit)
+
+```
+
+Local Moran's I for HIV in South Africa data.
+
+```{r}
+# Local Moran's I
+lmoran <- localmoran(district$HIV, nbw2, zero.policy=F,na.action=na.omit,alternative = "greater")
+head(lmoran)
+sum(lmoran[[1]])
+# Visualize
+library(tmap)
+tmap_mode("plot")
+district$lmI <- lmoran[, "Ii"] # local Moran's I
+district$lmZ <- lmoran[, "Z.Ii"] # z-scores
+# p-values corresponding to alternative greater
+district$lmp <- lmoran[, "Pr(z > E(Ii))"]
+
+HIVp1 <- tm_shape(district) + tm_polygons(col="HIV", title ="District level HIV prevalence", style ="quantile") + tm_layout(legend.outside = TRUE)
+
+HIVp2 <- tm_shape(district) + tm_polygons(col ="lmI", title ="Local Moran's I", style ="quantile") + tm_layout(legend.outside = TRUE)
+
+HIVp3 <- tm_shape(district) + tm_polygons(col ="lmZ", title ="Z-score",
+breaks = c(-Inf, 1.65, Inf)) + tm_layout(legend.outside =TRUE)
+
+HIVp4 <- tm_shape(district) + tm_polygons(col ="lmp", title ="p-value",
+breaks = c(-Inf, 0.05, Inf)) + tm_layout(legend.outside =TRUE)
+tmap_arrange(HIVp1, HIVp2, HIVp3, HIVp4)
+```
+
+# Spatial Autoregressive modeling
+
+## Get the data and prepare the data for analysis
+
+```{r,warning=FALSE,results='hide',autodep=FALSE}
+library(gstat)
+library(sp)
+data("meuse.all")
+data=meuse.all
+# Transform coordinates (UTM to geographical coordinates)
+sps  <- SpatialPoints(data[, c("x", "y")], proj4string = CRS("+proj=utm +zone=32"))
+spst <- spTransform(sps, CRS("+proj=longlat +datum=WGS84"))
+# Adding long and lat to the dataset after conversion 
+data[,c("long", "lat")] <- coordinates(spst)
+cords=cbind(data$long,data$lat) #Geographical cordinates
+cord=cbind(data$dist.m,data$dist.m) #Cords based on distance from the river
+cord2=cbind(data$elev,data$elev)# Cords based on relative  elevation
+```
+
+## Weighting matrix construction
+
+### Standard distance based weighting matrices
+
+```{r}
+library(spdep)
+#a. Exponential
+sep.dist<- as.matrix(dist(cords))
+w_Ex <- exp(-sep.dist); diag(w_Ex) <- 0
+rs_Ex <- rowSums(w_Ex); 
+w_Ex<- apply(w_Ex, 2, function(q) q/rs_Ex)
+# b. Inverse distance
+Inv_w=as.matrix(1/dist(cords));diag(Inv_w) <- 0
+rs_inv <- rowSums(Inv_w); # row sum
+Inv_w <- apply(Inv_w, 2, function(q) q/rs_inv)
+```
+
+### Both Geographical proximity and covariate dependent weights
+
+```{r}
+#alpha={0.2, 0.5,0.8} # Controls the strength of covariate effects on W
+alpha1=0.2 
+pw1=as.matrix(exp(-(alpha1*dist(cord)+(1-alpha1)*dist(cords))))
+diag(pw1) <- 0; rs_pw1 <- rowSums(pw1); 
+pw1 <- apply(pw1, 2, function(q) q/rs_pw1)
+alpha2=0.5
+pw2=as.matrix(exp(-(alpha2*dist(cord)+(1-alpha2)*dist(cords))))
+diag(pw2) <- 0; rs_pw2 <- rowSums(pw2); 
+pw2 <- apply(pw2, 2, function(q) q/rs_pw2)
+alpha3=0.8
+pw3=as.matrix(exp(-(alpha3*dist(cord)+(1-alpha3)*dist(cords))))
+diag(pw3) <- 0 ;rs_pw3 <- rowSums(pw3);
+pw3 <- apply(pw3, 2, function(q) q/rs_pw3)
+```
+
+## Model Fitting
+
+### Classical linear model
+
+```{r}
+ols=lm(log(lead) ~elev + dist.m, data=data)
+plot(data$long, data$lat, col=c("blue",
+  "red")[sign(resid(ols))/2+1.5], pch=19,
+  cex=abs(resid(ols))/max(resid(ols))*2, xlab="geographical xcoordinates", ylab="geographical y-coordinates")
+```
+
+The residual plot shows, errors are location dependent. Thus, to properly account the spatial effect, spatial data modeling approaches are needed.
+
+### Model fitting using tradational weighting matrices
+
+**Null model**
+
+```{r,warning=FALSE,results='hide'}
+library(spdep)
+library(spatialreg)
+
+summary(St2_null<-spautolm(log(copper) ~1,family="SAR", listw =mat2listw(w_Ex, style ='W'), data=data))
+summary(St3_null<-spautolm(log(copper) ~1,family="SAR", listw =mat2listw(Inv_w , style ='W'), data=data))
+```
+
+**A model with possible covariates using different weights**
+
+```{r,warning=FALSE}
+summary(St2_cov<-spautolm(log(copper) ~elev+dist.m,family="SAR", listw =mat2listw(w_Ex, style ='W'), data=data))
+summary(St3_cov<-spautolm(log(copper) ~elev+dist.m,family="SAR", listw =mat2listw(Inv_w , style ='W'), data=data))
+```
+
+```{r}
+plot(data$long, data$lat, col=c("blue",
+  "red")[sign(resid(St3_cov))/2+1.5], pch=19,
+  cex=abs(resid(St3_cov))/max(resid(ols))*2, xlab="geographical xcoordinates", ylab="geographical y-coordinates")
+```
+
+### Model fitting using proposed weighting matrices
+
+**Null model**
+
+```{r,warning=FALSE,results='hide'}
+summary(pw1_null<-spautolm(log(copper) ~1,family="SAR", listw =mat2listw(pw1, style ='W'), data=data))
+summary(pw2_null<-spautolm(log(copper) ~1,family="SAR", listw =mat2listw(pw2, style ='W'), data=data))
+summary(pw3_null<-spautolm(log(copper) ~1,family="SAR", listw =mat2listw(pw3 , style ='W'), data=data))
+```
+
+**Model A: Including distance from the river only in W**
+
+```{r}
+summary(PW1<-spautolm(log(copper) ~ elev,family="SAR", listw =mat2listw(pw1, style ='W'), data=data))
+summary(PW2<-spautolm(log(copper) ~ elev,family="SAR", listw =mat2listw(pw2, style ='W'), data=data))
+summary(PW3<-spautolm(log(copper) ~ elev,family="SAR", listw =mat2listw(pw3, style ='W'), data=data))
+```
+
+**Model B: Including covarite both in the mean structure and W**
+
+```{r}
+summary(pw1_cov<-spautolm(log(copper) ~ elev+dist.m,family="SAR", listw =mat2listw(pw1, style ='W'), data=data))
+summary(pw2_cov<-spautolm(log(copper) ~ elev+dist.m,family="SAR", listw =mat2listw(pw2, style ='W'), data=data))
+summary(pw3_cov<-spautolm(log(copper) ~ elev+dist.m,family="SAR", listw =mat2listw(pw3, style ='W'), data=data))
+```
+
+## Model Assessment
+
+### R\^2
+
+```{r}
+cat(paste ("Standard-Model 2-R2:", round((1-exp(-(2/nrow(data))*(logLik(St2_cov)-logLik(St2_null ))))*100,3), "\n"));
+cat(paste ("Standard-Model 3-R2:", round((1-exp(-(2/nrow(data))*(logLik(St3_cov)-logLik(St3_null ))))*100,3), "\n"))
+# Using Proposed weights
+cat(paste ("Proposed-Model 1-R2:", round((1-exp(-(2/nrow(data))*(logLik(pw1_cov)-logLik(pw1_null))))*100,3), "\n"));
+cat(paste ("Proposed-Model 2-R2:", round((1-exp(-(2/nrow(data))*(logLik(pw2_cov)-logLik(pw2_null))))*100,3), "\n"));
+cat(paste ("Proposed-Model 3-R2:", round((1-exp(-(2/nrow(data))*(logLik(pw3_cov)-logLik(pw3_null))))*100,3), "\n"))
+```
+
+### AIC
+
+```{r}
+cat(paste ("Standard-Model 2-AIC: ", round(AIC(St2_cov),3), "\n"))
+cat(paste ("Standard-Model 3-AIC: ", round(AIC(St3_cov),3), "\n"))
+#  Using Proposed weights
+cat(paste ("Proposed-Model 1-AIC: ", round(AIC(pw1_cov),3), "\n"))
+cat(paste ("Proposed-Model 2-AIC: ", round(AIC(pw2_cov),3), "\n"))
+cat(paste ("Proposed-Model 3-AIC: ", round(AIC(pw3_cov),3), "\n"))
+```
+
+### Mean square error
+
+```{r}
+# Traditional weights
+cat(paste ("Standard-W2-MSE: ", round(St2_cov$fit$SSE/nrow(data),3), "\n"))
+cat(paste ("Standard-W3-MSE: ", round(St3_cov$fit$SSE/nrow(data),3), "\n"))
+# Using Proposed weights
+cat(paste ("Proposed-W1-MSE: ", round(pw1_cov$fit$SSE/nrow(data),3), "\n"))
+cat(paste ("Proposed-W2-MSE: ", round(pw2_cov$fit$SSE/nrow(data),3), "\n"))
+cat(paste ("Proposed-W3-MSE: ", round(pw3_cov$fit$SSE/nrow(data),3), "\n"))
+```
+
+### Moran residual test and plots
+
+```{r}
+# Traditional weights
+st2.moran=moran.test(St2_cov$fit$residuals,listw =mat2listw(w_Ex, style ='W')); cat(paste ("st2- Moran I: ", round(st2.moran$statistic,3), "P-value", round(st2.moran$p.value,3),"\n"));
+st3.moran=moran.test(St3_cov$fit$residuals,listw =mat2listw(Inv_w, style ='W'));
+cat(paste ("st3- Moran I: ", round(st3.moran$statistic,3), "P-value", round(st3.moran$p.value,3),"\n"))
+# Using Proposed weights
+pw1.moran=moran.test(pw1_cov$fit$residuals,listw =mat2listw(pw1, style ='W')); 
+cat(paste ("PW1-Moran I: ", round(pw1.moran$statistic,3), "P-value", round(pw1.moran$p.value,3),"\n"))
+pw2.moran=moran.test(pw2_cov$fit$residuals,listw =mat2listw(pw2, style ='W'));
+cat(paste ("PW2-Moran I: ", round(pw2.moran$statistic,3), "P-value", round(pw2.moran$p.value,3),"\n"))
+pw3.moran=moran.test(pw3_cov$fit$residuals,listw =mat2listw(pw3, style ='W')); 
+cat(paste ("PW3-Moran I: ", round(pw3.moran$statistic,3), "P-value", round(pw3.moran$p.value,3),"\n"))
+```
+
+### Residual box plot
+
+```{r}
+boxplot(pw1_cov$fit$residuals,pw2_cov$fit$residuals,pw3_cov$fit$residuals)
+```
+
+```{r}
+knitr::knit_exit()
+```

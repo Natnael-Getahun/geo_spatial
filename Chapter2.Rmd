@@ -1,0 +1,367 @@
+---
+title: "Stat 4121: Applied Spatial Statistics"
+author: "Bedilu A. Ejigu"
+date: "2025-06-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Spatial Data Exploration
+
+Spatial data exploration depends on the type of spatial data under investigation.
+
+## Areal/lattice type of spatial data
+
+Areal or lattice type of data analysis begin by considering the spatial dependence which is handled through a weighting/neighborhood matrix. The **spdep** and **genstat** packages in **R** contains a number of functions to deal with spatial dependence structures for areal or lattice type of data. Some of its functions can be used to construct spatial neighborhood matrices and perform spatial autocorrelation analyses. For example, the functions *poly2nb()* and *dnearneigh()* can be used to create neighbor lists based on contiguity and distance criteria, respectively. Spatial neighborhood matrices can be built from the neighbor lists using the *nb2listw()* function.
+
+### Data prepartion
+
+First load the dataset with polygon shapefile and collected observations in each polygon. To demonstrate basic concepts, PMA2019 survey data was considered. In this survey data from 13 Zones (from SNNP and Somali regions) were not collected. As a result region average values were imputed for each of the 13 zones(SNNP-Amaro, SNNP-Basketo, SNNP-Burji, Somali-Daawa, SNNP-Derashe, Somali-Doolo, SNNP-Halaba,SNNP-Konta,Somali-Korahe,SNNP-Mirab Omo,Somali-Nogob,Somali-Shabelle,SNNP-Yem).
+
+```{r}
+library(sf)
+library(spdep)
+# Load Ethiopia  Zone shape files
+ETH.Zone=st_read("Data/ShapeFiles/ETH2021/eth_admbnda_adm2_csa_bofedb_2021.shp") #
+plot(ETH.Zone$geometry)
+```
+
+```{r}
+# Load the survey summary data aggregated by Zone
+mcp_data=read.csv("Data/mCP2019.csv")
+# Add Average distance to the SDP  into the  Zone shapefile data
+ETH.Zone$mcp=c(mcp_data$mcp)
+ETH.Zone$mean_dist=c(mcp_data$mean)
+ETHzone_mcp=ETH.Zone[,c(1,2,3,8,15,16,17)]
+View(ETHzone_mcp)
+```
+
+### Neighborhood construction based on geographical proximity or contiguity
+
+The *poly2nb()* function from the **spdep** package can be used to construct a list of neighbors based on areas with contiguous boundaries, that is, Zones sharing one or more boundary point. This function accepts a list of polygons and returns a list of class *nb* with the neighbors of each area.
+
+```{r}
+library(spdep)
+Neighbor <- spdep::poly2nb(ETHzone_mcp, queen = TRUE)
+head(Neighbor)
+# To get the number of neighbors of each area/lattice polygon
+lengths(Neighbor)
+card(Neighbor)
+table(1:nrow(ETHzone_mcp),card(Neighbor))
+```
+
+To visualize which polygon is a neighbor of others can be plotted as follows:
+
+```{r}
+library(ggplot2)
+# Neighbor connectedness
+plot(st_geometry(ETHzone_mcp), border = "lightgray")
+plot.nb(Neighbor, st_geometry(ETHzone_mcp), add = TRUE)
+# Highlighting the neighborhoodness
+id <- 29 # Zone number 29 has 5 neighbors 
+ETHzone_mcp$neighbors <- "other"
+ETHzone_mcp$neighbors[id] <- "area"
+ETHzone_mcp$neighbors[Neighbor[[id]]] <- "neighbors"
+ggplot(ETHzone_mcp) + geom_sf(aes(fill = neighbors)) + theme_bw() +
+scale_fill_manual(values = c("gray30", "gray", "white"))
+# To view  the Zone with largest number of neighbors
+id <- 26 # Zone 26 has 11 neighbors,
+ETHzone_mcp$neighbors <- "other"
+ETHzone_mcp$neighbors[id] <- "area"
+ETHzone_mcp$neighbors[Neighbor[[id]]] <- "neighbors"
+ggplot(ETHzone_mcp) + geom_sf(aes(fill = neighbors)) + theme_bw() +
+scale_fill_manual(values = c("gray30", "gray", "white"))
+
+```
+
+There are also other ways of creating neighborhoodness such as K nearest neighbors, and separation distance.
+
+### Spatial Weights
+
+Once the neighborhood list created, the spatial weights matrix corresponding to a neighbors list can be created using the *nb2listw* function.
+
+```{r}
+# Create neighborhood list
+nb <- poly2nb(ETHzone_mcp, queen = TRUE)
+# The style W is row standardized (1/number of neighbors)
+nbw <- spdep::nb2listw(nb, style = "W")
+nbw$weights[1:5]
+# Changing the style to B  will use the basic binary coding
+nbw2 <- spdep::nb2listw(nb, style = "B")
+nbw2$weights[1:5]
+```
+
+**Spatial weights matrix based on inverse distance values**
+
+The *nbdists* function used to compute the distance along the spatial links from the list of neighbors.
+
+```{r}
+coo <- st_centroid(ETHzone_mcp)
+nb <- poly2nb(ETHzone_mcp, queen = TRUE)
+dists <- nbdists(nb, coo)
+ids <- lapply(dists, function(x){1/x})
+nbw <- nb2listw(nb, glist = ids, style = "W",zero.policy=TRUE)
+nbw$weights[1:3]
+```
+
+### Sptial autocorrelation
+
+Before analyzing spatial data, you may ask "Is there spatial pattern? If so, how strong is it?". Spatial pattern suggests that measurements for areal units which are near to each other will tend to take more similar values than those for units far from each other.
+
+```{r}
+library(sf)
+library(mapview)
+# Interactively viewing the mCPR coverage by Zone
+mapview(ETHzone_mcp, zcol ="mcp")
+#Interactively viewing the average distance from the facility by Zone
+mapview(ETHzone_mcp, zcol ="mean_dist")
+```
+
+#### Moran's I
+
+**Global Moran's I**
+
+The Global Moran’s *I* provides an index to assess the spatial autocorrelation for the whole study region.
+
+```{r}
+# Neighbors
+library(spdep)
+nb <- poly2nb(ETHzone_mcp, queen = TRUE) # queen shares point or border
+nbw <- nb2listw(nb, style = "W")
+# Global Moran's I
+gmoran <-moran.test(ETHzone_mcp$mcp, nbw, zero.policy=attr(nbw,"zero.policy") , na.action=na.omit, alternative ="greater")
+gmoran
+# Moran's I
+gmoran[["estimate"]][["Moran I statistic"]] 
+# z-score
+gmoran[["statistic"]] 
+#p-value
+gmoran[["p.value"]] 
+```
+
+Moran’s I scatter plot
+
+```{r}
+ moran.plot(ETHzone_mcp$mcp, nbw, zero.policy=T,na.action=na.omit)
+```
+
+**Local Moran's I**
+
+In addition to the Global Moran *I*, there is often interest in getting a local measure of similarity between each area’s value and those of nearby areas. Local Indicators of Spatial Association (LISA) are designed to provide an indication of the extent of significant spatial clustering of similar values around each observation. A desirable property is that the sum of the LISA’s values across all regions is equal to a multiple of the global indicator of spatial association.
+
+```{r}
+# Local Moran's I
+lmoran <- localmoran(ETHzone_mcp$mcp, nbw, zero.policy=F,na.action=na.omit,alternative = "greater")
+head(lmoran)
+sum(lmoran[[1]])
+```
+
+```{r}
+library(tmap)
+tmap_mode("plot")
+ETHzone_mcp$lmI <- lmoran[, "Ii"] # local Moran's I
+ETHzone_mcp$lmZ <- lmoran[, "Z.Ii"] # z-scores
+# p-values corresponding to alternative greater
+ETHzone_mcp$lmp <- lmoran[, "Pr(z > E(Ii))"]
+
+p1 <- tm_shape(ETHzone_mcp) + tm_polygons(col = "mcp", title = "Zonal mCPR Coverage", style = "quantile") + tm_layout(legend.outside = TRUE)
+
+p2 <- tm_shape(ETHzone_mcp) + tm_polygons(col = "lmI", title = "Local Moran's I",
+style = "quantile") + tm_layout(legend.outside = TRUE)
+
+p3 <- tm_shape(ETHzone_mcp) + tm_polygons(col = "lmZ", title = "Z-score",
+breaks = c(-Inf, 1.65, Inf)) + tm_layout(legend.outside = TRUE)
+
+p4 <- tm_shape(ETHzone_mcp) + tm_polygons(col = "lmp", title = "p-value",
+breaks = c(-Inf, 0.05, Inf)) + tm_layout(legend.outside = TRUE)
+
+tmap_arrange(p1, p2, p3, p4)
+```
+
+**Example 2: HIV in South Africa**
+
+```{r}
+library(sf)
+library(spdep)
+district=st_read("Data/ShapeFiles/SAZ/zaf_admbnda_adm2_sadb_ocha_20201109.shp")
+#Load district level summarized HIV data
+HIV_prev <- read.csv("Data/SA_Admn2_HIV.csv")
+# Add the data to the Shapefile
+district$HIV=HIV_prev$HIV_prev
+# Create spatial weight matrix 
+nb2 <- poly2nb(district, queen = TRUE) # queen shares point or border
+nbw2 <- nb2listw(nb2, style = "W")
+# Global Moran's I
+gmoran2 <- moran.test(district$HIV, nbw2, zero.policy=attr(nbw2,"zero.policy") , na.action=na.omit, alternative ="greater")
+gmoran2
+# z-score
+gmoran2[["statistic"]] 
+#p-value
+gmoran2[["p.value"]] 
+# Moran’s I scatter plot
+moran.plot(district$HIV, nbw2, zero.policy=T,na.action=na.omit)
+```
+
+```{r}
+# Moran’s I scatter plot
+par(mfrow=c(1,2))
+moran.plot(district$HIV, nbw2, zero.policy=T,na.action=na.omit)
+moran.plot(ETHzone_mcp$mcp, nbw, zero.policy=T,na.action=na.omit)
+
+```
+
+Local Moran's I for HIV in South Africa data.
+
+```{r}
+# Local Moran's I
+lmoran <- localmoran(district$HIV, nbw2, zero.policy=F,na.action=na.omit,alternative = "greater")
+head(lmoran)
+sum(lmoran[[1]])
+# Visualize
+library(tmap)
+tmap_mode("plot")
+district$lmI <- lmoran[, "Ii"] # local Moran's I
+district$lmZ <- lmoran[, "Z.Ii"] # z-scores
+# p-values corresponding to alternative greater
+district$lmp <- lmoran[, "Pr(z > E(Ii))"]
+
+HIVp1 <- tm_shape(district) + tm_polygons(col="HIV", title ="District level HIV prevalence", style ="quantile") + tm_layout(legend.outside = TRUE)
+
+HIVp2 <- tm_shape(district) + tm_polygons(col ="lmI", title ="Local Moran's I", style ="quantile") + tm_layout(legend.outside = TRUE)
+
+HIVp3 <- tm_shape(district) + tm_polygons(col ="lmZ", title ="Z-score",
+breaks = c(-Inf, 1.65, Inf)) + tm_layout(legend.outside =TRUE)
+
+HIVp4 <- tm_shape(district) + tm_polygons(col ="lmp", title ="p-value",
+breaks = c(-Inf, 0.05, Inf)) + tm_layout(legend.outside =TRUE)
+tmap_arrange(HIVp1, HIVp2, HIVp3, HIVp4)
+```
+
+## Geostatistical Spatial Data
+
+### Data prepartion
+
+Here we will consider the stunting dataset. Now let us load and explore the stunting dataset.
+
+Step 1: Be familiar with your data, load and understand the stunting dataset.
+
+```{r}
+library(sf)
+#library(tmap)
+library(ggplot2)
+stunting <- read.csv("Data/Stunting2.csv")
+# Check the columns of the data and ensure that you understand what each column means.
+  View(stunting)
+# Plot the histogram of the lead concentration
+   hist(stunting$haz)
+# summary of the data
+   summary(stunting)
+# Display on a map the HAZ score
+## convert the R code to sf object
+data_sf <- stunting %>% st_as_sf(., coords=c("longnum", "latnum"), crs = 4326)
+# note that the code 4326 corresponds to the default coordinate reference system for long and lat
+## map the haz
+tm_shape(data_sf) + tm_symbols(col="haz", midpoint = NA)  
+## scatter plot of the log of the lead concentration and pm10
+ggplot(stunting, aes(x = age, y = haz)) + geom_point()
+# put a smooth line on it 
+ggplot(stunting, aes(x = age, y = haz)) + geom_point() + geom_smooth()
+```
+
+Step 2: Get the shape file.
+
+```{r}
+library(sf)
+# Loading district shapefile
+ETH=st_read("ShapeFiles/ETH2021/eth_admbnda_adm0_csa_bofedb_itos_2021.shp") 
+# Transform into UTM for geostatistical analysis
+ETH.utm <- st_transform(ETH,32637)
+st_crs(ETH.utm)
+# Get boundary of ETH
+Eth.union <-st_union(ETH.utm)
+plot(Eth.union)
+```
+
+Step 3: Create unique coordinates using a Prevmap package.
+
+```{r}
+library(PrevMap)
+ID.coords <- create.ID.coords(stunting,~utm_x+utm_y)
+HAZ.avg <- tapply(stunting$haz,ID.coords,mean)
+coords <- unique(stunting[,c("utm_x","utm_y")])
+
+par(mfrow=c(2,2),mar=c(4,4,2,2))
+plot(Eth.union, type = "l", asp = 1, xlab = "", ylab = "",
+     main=c("(a)"))
+points(coords,pch=20,cex=0.5)
+plot(haz ~ age, data = stunting,main="(b)",xlab="Age",pch=20,cex=0.5)
+plot(haz ~ factor(meducation), data = stunting,main=c("(c)"),xlab="Maternal education")
+plot(haz ~ factor(hhwealth), data = stunting,main="(d)",xlab="Wealth index")
+par(mfrow=c(1,1))
+```
+
+Applying splines for the age effect.
+
+```{r}
+library(splines)
+max.vec <- function(val,x) sapply(x,function(i) max(0,i-val))
+lm.fit <- lm(haz ~ age+I(max.vec(1,age))+I(max.vec(2,age))+meducation+hhwealth,data=stunting)
+summary(lm.fit)
+
+beta.hat <- coef(lm.fit)
+age.set <- seq(0,5,length=1000)
+age.vars <- cbind(age.set,max.vec(1,age.set),max.vec(2,age.set))
+broken.sticks <- as.numeric(age.vars%*%beta.hat[2:4])
+std.errors <- sqrt(diag(age.vars%*%vcov(lm.fit)[2:4,2:4]%*%t(age.vars)))
+ci.95 <- cbind(broken.sticks-qnorm(0.975)*std.errors,
+               broken.sticks+qnorm(0.975)*std.errors)
+
+matplot(age.set,cbind(ci.95,broken.sticks),type="l",xlab="Age (years)",
+        ylab="",
+        lty=c("dashed","dashed","solid"),col = 1)
+```
+
+### Exploring Variogram and Correlogram
+
+Stunting in Ethiopia
+
+```{r}
+library(geoR)
+library(ncf)
+geodata.vg=as.geodata(stunting,coords=9:10, data.col=8)
+dist.vg=variog(geodata.vg);plot(dist.vg, main="from ETH stunting data")
+varfit.dist=variofit(dist.vg, ini.cov.pars = c(3,5), cov.model ="matern")
+summary(varfit.dist)
+```
+
+HIV in south Africa
+
+```{r}
+library(geoR)
+SA_HIV=read.csv("Data/SA_Admn2_HIV.csv")
+names(SA_HIV)
+HIV.vg=as.geodata(SA_HIV,coords=8:9, data.col=3)
+variog_HIV=variog(HIV.vg);plot(variog_HIV, main="from SA HIV data")
+varfit=variofit(variog_HIV, ini.cov.pars = c(3,5), cov.model ="matern")
+summary(varfit)
+# Correlogram Plots
+library(ncf)
+dist.cor <- correlog(SA_HIV$lon, SA_HIV$lat,     SA_HIV$logitp,increment=2);plot(dist.cor)
+
+```
+
+Putting the two plots together.
+
+```{r}
+# Variogram plot
+par(mfrow=c(1,2))
+plot(variog_HIV, main="from SA HIV data")
+plot(dist.vg, main="from ETH stunting data")
+```
+
+```{r}
+knitr::knit_exit()
+```
