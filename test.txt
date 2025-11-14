@@ -1,0 +1,410 @@
+[file name]: standardized_formatted.pdf
+[file content begin]
+
+ETHIOPIAN CAPITAL MARKET AUTHORITY
+DIRECTIVE NUMBER 1047/2025
+
+DEMATERIALIZATION OF PUBLICLY OFFERED SECURITIES
+MARCH 2025
+
+TABLE OF CONTENTS
+
+PART I: GENERAL PROVISIONS
+1. Short Title .................................................................................... 6
+2. Definitions ................................................................................... 6
+3. Scope of Application .................................................................... 8
+
+PART II: DEMATERIALIZATION AND REGISTRATION OF SECURITIES
+4. Registration at the Central Securities Depository ......................... 8
+5. Legal Nature of Dematerialized Securities .................................. 9
+
+PART III: DEMATERIALIZATION PROCESS
+6. Communication During Dematerialization .................................. 9
+7. Migration of Shareholders Data to Central Security Depository Issuers Account and Reconciliation ................................................. 10
+8. Requirement to Open Securities Holder Accounts ...................... 11
+9. Deposit of Physical Certificates .................................................. 12
+10. Pledged Securities .................................................................... 13
+11. Fully Paid-up and Partly Paid Shares ........................................ 13
+12. Errors and Complaints .............................................................. 13
+
+PART IV: DECLARATION OF DEMATERIALIZATION OF SECURITIES AND SPECIAL ACCOUNT
+13. Declaration of Dematerialization of Securities .......................... 14
+14. Special Account ....................................................................... 15
+
+PART V: SECURITIES RECORDS AND ACCOUNTS, SHADOW REGISTER AND REPORTING
+15. Official Record of Depositors .................................................... 16
+16. Shadow Register to be Maintained by Issuers ........................... 16
+17. Statement of Accounts ............................................................. 17
+18. Reporting ................................................................................. 17
+
+PART VI: INSPECTION, DIRECTIONS AND PROHIBITED ACTIVITIES
+19. Power of Authority to Conduct Inspections ............................... 17
+20. The Authority's Power to Issue Instructions in Certain Cases ..... 18
+21. Prohibited Activities ................................................................. 18
+
+PART VII: ENFORCEMENT, ADMINISTRATIVE MEASURES AND PENALTIES
+22. Enforcement ............................................................................ 18
+23. Administrative Measures .......................................................... 18
+24. Penalties for Non-Compliance with Record Reconciliation Requirements .................................................................... 19
+25. Penalties for Non-Compliance with Communication and Reporting Requirements .................................................................... 19
+26. Penalties for Non-Compliance with Addressing Errors and Complaints ........................................................................... 20
+27. Penalties for Submission of False or Misleading Information or Documents ......................................................................... 20
+28. Penalties for Issuance of Physical Certificates and Offer of Securities ........................................................................... 20
+29. Penalties for Non-Compliance with the Requirement of Segregating Assets ................................................................. 20
+30. Penalties for Non-Compliance with the Requirement of Cooperation to the Pledgor ............................................................ 20
+31. Other Violations ....................................................................... 20
+
+PART VIII: MISCELLANEOUS PROVISIONS
+32. Inapplicable Laws .................................................................... 21
+33. Effective Date .......................................................................... 21
+
+PREAMBLE
+
+WHEREAS, it is necessary to transition from paper-based securities to an efficient, secure, and transparent electronic system that enhances market operations, promotes investor confidence, and improves the capital markets overall functioning;
+
+WHEREAS, it is necessary to provide for a dematerialization regulatory framework to efficiently transition from a paper-based certificate system of holding securities to an electronic system of holding securities to facilitate electronic issuance and transfer of securities;
+
+NOW THEREFORE, the Authority hereby issues the following Directive on the Dematerialization of Securities in accordance with Articles 6/3, 43/3 and 108/2 of the Capital Market Proclamation No. 1248/2021.
+
+PART I: GENERAL PROVISIONS
+
+1. Short Title
+This Directive may be cited as the "Directive for the Dematerialization of Publicly Offered Securities No. 1047/2025."
+
+2. Definitions
+In this Directive unless the context otherwise requires:
+
+1/ "Authority" means the Ethiopian Capital Market Authority established under the Capital Market Proclamation No. 1248/2021.
+
+2/ "Account Holder" means a person in whose name a Securities Depository Member maintains a securities account, whether that person is acting for its own account or for the account of others.
+
+3/ "Beneficial Owner" means the ultimate owner of a security, entitled to all the rights, benefits, powers and privileges and all liabilities, duties and obligations in respect of, or arising from the security.
+
+4/ "Book-entry" means an electronic record system for dematerialized securities where records and ownership changes are kept electronically using a computerized entry system.
+
+5/ "Dematerialization Date" means a specific day, declared by the Authority, on which paper-based securities no longer serve as evidence of ownership, and the official record of ownership is maintained exclusively by the Central Securities Depository.
+
+6/ "False Information" or "Misleading Information" means information that at the time and under the circumstances it was shared, was false or misleading regarding a material fact, or was false or misleading due to the omission of a material fact, and the person sharing it knew or should have known it was false and misleading.
+
+7/ "Know Your Client" is a mandatory and recurring process of identify and verifying a client's identity.
+
+8/ "Member of Securities Depository and Clearing Services Provider" or "Securities Depository Member" means an entity licensed or authorized by the Authority and appointed by the Securities Depository as prescribed under Article 2(66) of the Proclamation.
+
+9/ "Nominee Account" means an account where securities are held in the name of a third-party Nominee.
+
+10/ "Omnibus Account" means an account where the Securities of several Beneficial Owners are consolidated in one account opened in the name of a Securities Depository Member or a Nominee.
+
+11/ "Pledged Security" means a security used as collateral by a Beneficial Owner in securing a debt or a loan.
+
+12/ "Pledgee" means a person to whom a pledge is given.
+
+13/ "Pledgor" means a Beneficial Owner who pledges his security to guarantee payment on a loan contract or the payment of a debt.
+
+14/ "Proclamation" means the Capital Market Proclamation No. 1248/2021.
+
+15/ "Securities Account" means an account opened on a Central Securities Depository in which securities are credited or debited.
+
+16/ "Securities Depository and Clearing Services Provider" or "Securities Depository" means an entity licensed by the Authority as a Securities Depository and Clearing Company or an entity authorized by the Authority to provide securities depository and clearing services according to Article 54 of the Proclamation.
+
+17/ "Securities Holder" means a beneficial owner of securities including a nominee.
+
+18/ "Segregated Client Accounts" means accounts where securities are held separately by the Central Security Depository for each client, providing the client's direct ownership and control over their securities.
+
+19/ "Shadow Register" means a register of holders of securities maintained by public companies that reflects the record of the Central Security Depository.
+
+20/ "State Owned Enterprise" shall be defined as per Article 2(1) of the Federal Government State Owned Enterprise Proclamation No 1314/2024 and it included other relevant regional state laws governing regional state owned enterprise.
+
+21/ "Unclaimed Securities" means securities whose physical certificates or any other proof of ownership have not been collected by Securities Holders from the issuers.
+
+22/ "Un-reclaimed Securities" means securities that have not been dematerialized as the security holder has not approached a Securities Depository Member and deposited the securities or any other proof of ownership for dematerialization.
+
+23/ In this Directive, any expression in the masculine shall include the feminine.
+
+24/ Any terms and phrases defined in the proclamation shall apply to this directive.
+
+3. Scope of Application
+
+1/ This Directive shall apply to publicly offered and traded securities including but not limited to Publicly offered Securities issued by a State-Owned Enterprise or Regional States which are not fully guaranteed by the government.
+
+2/ Notwithstanding sub article 1 of this Article, this Directive shall apply to other securities, the issuers of which authorize the Securities Depository and Clearing services provider to act as their transfer agents.
+
+PART II: DEMATERIALIZATION AND REGISTRATION OF SECURITIES
+
+4. Registration at the Central Securities Depository
+
+1/ Publicly offered securities and other securities referred under article 3/2 of this directive, shall be dematerialized and registered with the Central Security Depository.
+
+2/ As per sub article 1 of this article publicly offered securities shall not be registered with the Central Securities Depository and traded until such securities are registered with the Authority.
+
+5. Legal Nature of Dematerialized Securities
+
+1/ Dematerialized securities shall be legally recognized, valid, and enforceable financial instruments.
+
+2/ Ownership of dematerialized securities shall be evidenced by the Central Security Depository electronic records.
+
+3/ Transfer of ownership of dematerialized securities shall be done through electronic book entries in the Central Security Depository system.
+
+4/ The electronic register maintained by the Central Security Depository shall serve as the authoritative source of ownership information, documenting the identification details of shareholders, quantities issued and securities held by Security Holders and other information as required by the rules of the Securities Depository.
+
+5/ Dematerialized Securities of the same issue shall be fungible whereby the securities of the same class, same issuance, and right issued by the same issuer are interchangeable in the market without affecting their value.
+
+PART III: DEMATERIALIZATION PROCESS
+
+6. Communication During Dematerialization
+
+1/ Issuers shall notify all their Security Holders:
+   a) of the requirements under this Directive;
+   b) of the dematerialization process;
+   c) the initiation of dematerialization process for their securities; and
+   d) the status of the dematerialization process upon request.
+
+2/ The notifications required under Sub-Articles (1) above shall be published in a newspaper of wide circulation in Ethiopia both in Amharic and English languages.
+
+3/ In addition to publishing a newspaper the issuer may also send notice via SMS, electronic mail, issuer's website, or other additional medium of communication of its choice.
+
+7. Migration of Shareholders Data to Central Security Depository Issuers Account and Reconciliation
+
+1/ Every issuer shall notify all its Security Holders to update their contact information.
+
+2/ Before an Issuer submits its securities register to the Securities Depository for dematerialization, it shall reconcile its register to capture details of all its Securities Holders and their ownership interests.
+
+3/ The reconciliation at a minimum shall address the following:
+   a) Total number of securities issued and the amount of capital they represent;
+   b) Details of Securities Holders including their names, contact details, unique identifier, percentage of holding, and number of holdings; and
+   c) For pledged securities, the names of the Pledgee and the Pledgor and all pledge details that are specified on the pledge contract.
+
+4/ Upon issuance of this Directive, the Securities Depository shall provide a migration form to all issuers of publicly offered securities, which issuers must use to submit their securities holder register and migrate their securities to the Central Securities Depository.
+
+5/ Issuers of publicly offered securities shall submit a register of all Securities Holders to the Central Securities Depository in the form prescribed by the Securities Depository.
+
+6/ The Central Securities Depository shall verify the information provided on the form against the form's requirements and also provide support to issuers and market participants who request confirmation or assistance.
+
+7/ Upon confirmation of the register's readiness (per Sub-Article 6) and the Authority's confirmation of the securities registration, the Securities Depository will credit the securities to the appropriate securities accounts at the Central Securities Depository, held in the names of the securities holders and managed by the issuer.
+
+8/ The responsibility stated under sub article 7 of this article will make the issuer temporary safe keeping agent.
+
+9/ The record of the securities in accounts managed by the issuer under Sub-Article (7) of this Article does not make the issuer the holder of rights on these securities.
+
+10/ The issuer records of securities ownership shall be replaced with electronic records of securities ownership in the book-entry register maintained on the Central Securities Depository.
+
+8. Requirement to Open Securities Holder Accounts
+
+1/ No person shall place an instruction to sell or buy deposited or dematerialized securities without first having a securities account.
+
+2/ A Securities Depository Member shall open and maintain a securities account with the Securities Depository itself and its clients.
+
+3/ A Securities Depository Member shall segregate its assets from the assets of its clients.
+
+4/ The Securities Depository may establish different types of securities accounts. The types of accounts may include the following:
+   a) Segregated client accounts opened in the name of a Beneficial Owner;
+   b) Nominee accounts opened in the name of an authorized nominee for convenience and administrative purposes; or
+   c) Omnibus accounts opened in the name of a Securities Depository Member or a Nominee.
+
+5/ Every securities account opened with the Securities Depository shall be in the name of the Beneficial Owner of the securities, a Securities Depository Member or a Nominee.
+
+9. Deposit of Physical Certificates
+
+1/ Securities Holders shall open a securities account at the Central Securities Depository through a Securities Depository Member after completing an account opening form, attaching identification details and know your customer requirements in the format prescribed in the Securities Depository's rules.
+
+2/ After opening a Central Securities Depository account, every Securities Holder shall submit his physical certificate or evidence of ownership of securities to a Securities Depository Member accompanied by a deposit form, a valid means of identification and know your customer requirements as prescribed in the Securities Depository rules.
+
+3/ Upon receiving physical certificates or any other evidence of ownership and completed forms from their clients, Securities Depository Members shall submit them to the issuer for verification and confirmation.
+
+4/ Upon the request of the Securities Depository Member, an issuer shall verify the authenticity of the documents submitted by a Securities Holder to a Securities Depository Member and confirm that the details of the Securities Holder provided are identical to the details in its register.
+
+5/ Upon verifying the documents submitted as per the Securities Depository's manual the issuer shall approve or disapprove the credit of the securities into the client's Central Securities Depository security account.
+
+6/ Upon confirmation by the Securities Depository Member that the Security Holder's account has been credited with the securities, the issuer shall mark the physical certificates or those securities whose issuance is paper based as dematerialized and store them for a minimum of 10 (ten) years since the day of dematerialization.
+
+10. Pledged Securities
+
+1/ All pledged securities are eligible for dematerialization provided that the issuer of the securities submits details of the pledge with the registration request.
+
+2/ Before a Security Holder deposits the physical certificates of Pledged securities, the holder must consult with the Pledgee.
+
+3/ A Pledgee shall cooperate with the Pledgor to surrender the physical securities.
+
+4/ The Pledged securities shall be recorded in the securities account of the Securities Holder on the Central Securities Depository and shall be marked as Pledged to the Pledgee as per the rules of the Securities Depository.
+
+11. Fully Paid-up and Partly Paid Shares
+
+1/ All fully paid-up shares shall be dematerialized and credited into the Central Securities Depository account of Securities Holders in accordance with the provision of this Directive.
+
+2/ There shall be no restriction on the transaction of fully paid dematerialized securities recorded in the name of the Securities Holder or their authorized nominee, unless the securities are pledged, used as collateral, or subject to legal restrictions by an appropriate authority.
+
+3/ Unpaid or partly paid shares shall only be dematerialized upon being fully paid up by the securities holder.
+
+12. Errors and Complaints
+
+1/ A complainant shall first report any errors, complaints and disputes arising from the dematerialization of securities to the issuer for resolution in writing.
+
+2/ The issuer shall resolve or rectify the error as appropriate within 10 (ten) working days from the day it receives the complaint.
+
+3/ The issuer may use the information provided by the complainant, its internal records, Federal Document Authentication and Registration Service records and any other sources including the paper-based securities to resolve the complaint.
+
+4/ Where the resolution affects the records or information on the Central Securities Depository, the issuer must notify the Central Securities Depository to correct the information within 2 (two) working days.
+
+5/ Every Issuers shall report all complaints and their final resolution to the Authority within five (5) working days after the end of every month.
+
+6/ Where the complaint is not resolved within 10 (ten) working days, or where the complainant is not satisfied with the decision of the issuer, the Securities Holder may refer the complaint or appeal against the decision of the issuer to the Authority.
+
+7/ The referral or the appeal to the Authority shall include a summary of the process and copies of all relevant supporting documents.
+
+8/ The Authority shall review the referral under Sub-Article 6 of this Article and make a decision within ten (10) working days. The Decision given by the Authority Shall be final.
+
+9/ Complaints that do not fall under the Authority's mandate shall be referred to a competent court in accordance with applicable laws.
+
+PART IV: DECLARATION OF DEMATERIALIZATION OF SECURITIES AND SPECIAL ACCOUNT
+
+13. Declaration of Dematerialization of Securities
+
+1/ The Authority shall provide a dematerialization date.
+
+2/ After the declaration of this date, prima facia evidence of ownership and transactions of securities are recorded electronically in a centralized securities depository, and paper certificates cease to be valid for proof of ownership for trading or settlement purposes.
+
+3/ Notwithstanding the provisions of Sub-Article (1) and (2) of this Article, the Authority may declare a security of an issuer whose securities are dematerialized and registered at the Central Security Depository as a dematerialized securities even though dematerialization date is yet to be declared by the Authority.
+
+4/ The Authority may also declare a non-publicly offered securities as dematerialized securities in consultation with an issuer of such securities.
+
+5/ The Central Securities Depository shall register securities referred under sub article 3 and 4 of this article with a different International Securities Identification Number (ISIN) or National Securities Identification Number (NSIN).
+
+6/ Every issuer shall:
+   a) within a month of the declaration date, or the declaration of dematerialization by the authority as sub article 3 of this article, notify its Security Holders that its securities have been dematerialized; and
+   b) amend its document of incorporation, or memorandum of association, as the case may be, to give effect and comply with the provisions of the commercial code and this Directive.
+
+14. Special Account
+
+1/ Ten years after the declaration of dematerialization date by the Authority, securities represented by physical certificates that remain unclaimed or un-reclaimed since the date of dematerialization shall be transferred to a Special Account managed by the Authority.
+
+2/ Securities holders referred to under Sub-Article 1 of this Article may claim their securities by providing evidence of their legal or beneficial ownership to the Authority.
+
+3/ The securities specified under Sub-Article 1 of this Article and their related benefits shall not be transferred out of the Special Fund without the approval of the Authority.
+
+PART V: SECURITIES RECORDS AND ACCOUNTS, SHADOW REGISTER AND REPORTING
+
+15. Official Record of Depositors
+
+1/ The Securities Depository shall maintain the official ownership record on all dematerialized securities which shall include details as specified in Article 5(4) of this directive and the name of:
+   a) every Securities Holder who has surrendered their certificates for crediting into a securities account held by such depositor; and
+   b) every Securities Holder who has not surrendered their certificates for crediting into their securities account.
+
+2/ A record of Securities Holders maintained by the Securities Depository to Sub-Article (1) of this Article shall:
+   a) contain information in electronic form;
+   b) contain such other information as may be required under the Securities Depository rules, and
+   c) comply with all applicable data protection and privacy regulations.
+
+3/ Nothing in this section shall be construed as making Securities Depository an agent of the issuer to provide registration services.
+
+16. Shadow Register to be Maintained by Issuers
+
+1/ Without prejudice to the provisions of this Directive, an issuer may maintain an electronic shadow register of issued securities.
+
+2/ An issuer that chooses to maintain a shadow register, as per sub article 1 of this article, shall have a system that facilitates continuous reconciliation and update of its electronic shadow register with the Central Security Depository's record or otherwise have access to view and print shareholders' records from the Central Security Depository in accordance with the rules and regulation of the Securities Depository.
+
+17. Statement of Accounts
+
+1/ The Securities Depository shall issue account statements to all account holders periodically as per its internal rules.
+
+2/ Notwithstanding the provisions of Sub-Article (1) of this Article, an account holder may request a Central Security Depository account statement from a Securities Depository Member.
+
+3/ Notwithstanding the provisions of Sub Articles (1) and (2) of this Article, an account holder may at any time make a written request to the Securities Depository for an official statement of his account.
+
+4/ Upon receiving a written request under Sub-Article (3) of this Article and the payment of any applicable fees as per its rules, the Securities Depository shall issue an official signed and stamped statement of account to the account holder.
+
+18. Reporting
+
+1/ The Securities Depository shall submit monthly reports to the Authority on the status of dematerialization not later than seven (7) days after the end of every month.
+
+2/ The report shall be in the form specified by the Authority.
+
+3/ The Securities Depository shall furnish the issuer with a monthly report on the transactions on its securities.
+
+PART VI: INSPECTION, DIRECTIONS AND PROHIBITED ACTIVITIES
+
+19. Power of Authority to Conduct Inspections
+
+1/ The Authority shall have the power to conduct onsite and off-site supervision and inspections, with or without prior notice on any issuer, a Securities Depository, or a Securities Depository Member with access to all necessary information, books, and records.
+
+2/ In the course of its inspections, the Authority may engage external auditors, law enforcement personnel, or other relevant authorities as deemed appropriate.
+
+3/ During an inspection conducted by the Authority, every director, manager, partner, secretary, officer or any employee of the Securities Depository, issuer or a Securities Depository Member shall be obliged to produce all the necessary information, records, or documents in their custody.
+
+20. The Authority's Power to Issue Instructions in Certain Cases
+Following an inquiry or inspection, the Authority may direct any issuer, Securities Depository, or a Securities Depository Member to cease any activity that poses or may pose a risk of harm to the securities market or the interests of investors.
+
+21. Prohibited Activities
+The following activities are prohibited:
+1/ Refusing to tender certificates of securities for dematerialization;
+2/ Submitting false or misleading information and/or documents;
+3/ Issuing Physical Certificates for Issuance and Offer of Securities.
+
+PART VII: ENFORCEMENT, ADMINISTRATIVE MEASURES AND PENALTIES
+
+22. Enforcement
+The Authority will oversee and ensure that issuers, a Securities Depository, investors, a Securities Depository Members, and any person or entity acting under this Directive comply with its provisions. In case of any violations, the Authority may take appropriate administrative measures against them.
+
+23. Administrative Measures
+The Authority shall have the power to impose any or a combination of the following administrative measures, in addition to the fine stated under sub-section II below, for non-compliance with or violation of any provisions of this Directive:
+a) issue a public or private warning;
+b) impose a fine;
+c) direct person(s) or entity(ies) to buy back securities;
+d) suspension or prohibition of trading of securities;
+e) order a stop actions;
+f) order a corrective measure;
+g) blacklist a Securities Depository Member, capital market service provider, issuer, director(s), company secretary, senior management, representative, promoter, or anyone responsible for violation of this Directive; or
+h) any other measure the Authority prescribes from time to time.
+
+24. Penalties for Non-Compliance with Record Reconciliation Requirements
+
+1/ Any issuer who fails to reconcile its register of securities prior to submission to the Central Security Depository for conversion to electronic form will be subject to a fine not less than 500,000.00 (five hundred thousand) and not exceeding 1,000,000.00 (one million) and an additional Birr 50,000.00 (Fifty thousand) for everyday default after the Authority requested rectification.
+
+2/ As per this directive a Securities Depository Member who fails to send the securities to an issuer for reconciliation with its records before converting the securities in to electronic format and crediting it into the Central Security Depository will be subject to a fine not less than 500,000.00 (five hundred thousand) and not exceeding 1,000,000.00 (one million) and an additional Birr 50,000.00 (Fifty thousand) for everyday default after the Authority requested rectification.
+
+25. Penalties for Non-Compliance with Communication and Reporting Requirements
+
+1/ Any issuer who fails to notify its Security Holders of the dematerialization processes as per this directive will be subject to a fine not less than Birr 100,000.00 (one hundred thousand) and not exceeding Birr 500,000.00 (five hundred thousand) and an additional Birr 30,000.00 (thirty thousand) for everyday default after the Authority requested rectification.
+
+2/ Any issuer that fails to provide sufficient information about the dematerialization process to its Securities Holders will be subject to a fine of Birr 100,000.00 (one hundred thousand) and not exceeding 500,000.00 (five hundred thousand) and an additional Birr 10,000.00 (ten thousand) for everyday default after the Authority requested rectification.
+
+3/ Any issuer that fails to notify Securities Holders of the status of the dematerialization of their securities as per their request will be subject to a fine of Birr 10,000.00 (ten thousand) to 20,000.00 (twenty thousand) and an additional Birr 1,000.00 (one thousand) for everyday default of not complying.
+
+4/ Any issuer who fails to submit a status report to the Authority within the prescribed time and form on the dematerialization process will be subject to a fine of Birr 30,000.00 (thirty thousand) to 40,000.00 (Forty thousand) and an additional Birr 2,000.00 (two thousand) for everyday of default.
+
+5/ Where the Securities Depository fails to provide every issuer with a monthly report on changes to its register or fail to grant issuers access to its system to view changes to its register, it will be subject to a fine of Birr 50,000.00 (Fifty thousand) to 100,000.00 (hundred thousand) and an additional Birr 5,000.00 (five thousand) for everyday of default.
+
+26. Penalties for Non-Compliance with Addressing Errors and Complaints
+Any issuer that does not address complaints within the time prescribed by this directive or that does not notify the Authority of resolved and unresolved complaints within the time prescribed in this directive will be subject to a fine not less than Birr 100,000.00 (hundred) and not exceeding 500,000.00 (five hundred thousand) and an additional Birr 10,000.00 (ten thousand) for everyday default.
+
+27. Penalties for Submission of False or Misleading Information or documents
+Anyone who Submits false or misleading information or documents or transfer of securities from the special fund without the approval of the Authority will be subject to a penalty of fine not less than Birr 500,000.00 (five hundred thousand) and not exceeding 1,000,000.00 (one million).
+
+28. Penalties for Issuance of Physical Certificates and Offer of Securities
+
+1/ Any issuer who issues securities evidenced by physical certificates after the Directive becomes effective will be subject to a fine not less than Birr 100,000.00 (hundred) and not exceeding 500,000.00 (five hundred thousand) and an additional Birr 10,000.00 (ten thousand) for everyday default after request of rectification.
+
+2/ Any issuer who fails to update its memorandum of association or document of incorporation will be subject to a fine of Birr 50,000 to 100,000 and an additional Birr 5,000 for everyday default after the Dematerialization Date.
+
+29. Penalties for Non-Compliance with the requirement of Segregating Assets
+Any Securities Depository Member who fails to segregate assets from the assets of its clients depending on the circumstances of the case will be subject to a penalty of fine not less than Birr 100,000.00 (hundred thousand) and not exceeding 500,000.00 (five hundred thousand) and an additional Birr 10,000.00 (ten thousand) for everyday default after the Authority requests rectification.
+
+30. Penalties for Non-Compliance with the requirement of cooperation to the pledgor
+A Pledgee who fails to cooperate with the Pledgor to surrender the physical securities will be subject to a fine of Birr 50,000.00 (Fifty thousand) to 100,000.00 (hundred thousand) and an additional Birr 5,000.00 (five thousand) for everyday of default.
+
+31. Other Violations
+Unless stipulated in this part, any violation of the provision of this Directive resulting in a fine shall be subject to a fine of not less than Birr 15,000 (fifteen thousand).
+
+PART VIII: MISCELLANEOUS PROVISIONS
+
+32. Inapplicable laws
+No law or customary practice, inconsistent with this Directive, shall have an effect concerning matters governed by this Directive.
+
+33. Effective Date
+This Directive shall come into force on the date of its registration with the Ministry of Justice and uploading it onto the official website of the Authority.
+
+DONE IN ADDIS ABABA ON THE 5TH DAY OF MARCH 2025
+
+HANA TEHELKU
+DIRECTOR GENERAL
+ETHIOPIAN CAPITAL MARKET AUTHORITY
+
+[file content end]
